@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SSRF Task</title>
+    <link rel="stylesheet" href="./offline_bootstrap/bootstrap-5.3.3-dist/css/bootstrap.min.css">
+    <script src="./offline_bootstrap/bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="./offline_bootstrap/bootstrap-5.3.3-dist/font/css/fontawesome-all.css">
+    <link rel="stylesheet" href="./resources/css/task.css" />
+  </head>
+
+  <body>
+    <div
+      class="position-fixed top-0 w-100"
+      style="z-index: 100; background-color: #01102a"
+    >
+      <div class="border border-info">
+        <h1 class="text-center text-white mt-3" style="font-weight: 500">
+          Server-Side Request Forgery
+        </h1>
+      </div>
+      <nav class="navbar navbar-expand-lg navbar-light mt-1">
+        <div class="container-fluid">
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-mdb-toggle="collapse"
+            data-mdb-target="#navbarCenteredExample"
+            aria-controls="navbarCenteredExample"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <i class="fas fa-bars"></i>
+          </button>
+          <div
+            class="collapse navbar-collapse justify-content-center"
+            id="navbarCenteredExample"
+          >
+            <ul class="navbar-nav mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link text-white" href="home.html">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link text-white" href="tutorials.html"
+                  >Tutorials</a
+                >
+              </li>
+              <li class="nav-item">
+                <a class="nav-link text-white" href="card.html"
+                  >Practical-Labs</a
+                >
+              </li>
+              <li class="nav-item">
+                <a class="nav-link text-white" href="about.html">About</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link text-white" href="sign_in.html" id="signin"
+                  >Sign-In</a
+                >
+              </li>
+              <li class="nav-item">
+                <button class="nav-link text-white" id="signout">
+                  Sign-Out
+                </button>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </div>
+
+    <section>
+
+      <div class="loader-container">
+        <div class="loader"></div>
+      </div>
+      <div class="container" style="margin-top: 10%">
+        <div class="row justify-content-end">
+          <div
+            class="col-xl-12 mt-5 p-5 position-relative"
+            style="
+              border-radius: 12px;
+              background: #01102a;
+              box-shadow: 7px 7px 13px 1px #010b1e, -10px -9px 11px 1px #1d335a;
+            "
+          >
+
+            <div class="content_btn">
+              <p id="lab_btn">
+                <i class="fa fa-flask px-2" aria-hidden="true"></i>Lab
+              </p>
+              <p id="unsolved_btn">Unsolved</p>
+            </div>
+            <div class="tagline p-2">
+              <h1 class="text-center" id="title"></h1>
+            </div>
+            <div class="content p-1 mt-4">
+              <p class="text-center" id="description"></p>
+            </div>
+            <div class="content mt-2">
+              <p id="note"></p>
+            </div>
+            <div class="content mt-2">
+              <div class="d-flex justify-content-center">
+                <a href="lab1/index.html" onclick="setUpLab();" id="url" target="_blank">Access The Lab</a>
+              </div><br>
+              <div class="d-flex justify-content-center">
+               <a href="app-launcher/start-app.php" id="url" target="_blank">Start Burpsuite</a>
+              </div><br>
+
+            </div>
+            <!-- flag submit -->
+            <div class="d-flex justify-content-center content mt-5">
+              <input id="flag" type="text" placeholder="Enter Flag" />
+              <div>
+                <a
+                  href="#"
+                  onclick="submitFlag()"
+                  id="url"
+                  style="padding: 5px 15px"
+                  >Submit</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+    <script src="./resources/labheader/js/user_functions.js"></script>
+    <script src="./resources/labheader/js/common_script.js"></script>
+    <script>
+      // Selecting elements from the DOM
+      var loader = document.querySelector('.loader-container')
+      var title = document.getElementById('title')
+      var description = document.getElementById('description')
+      var pageUrl = document.getElementById('url')
+      const challengeId = getCookie('challengeId') // Get challengeId from cookie
+
+      // Function to execute when the window loads
+      window.onload = async function () {
+        try {
+          // Check if challengeId exists
+          if (!challengeId) {
+            console.error('Challenge id not found in cookie')
+            return
+          }
+
+          // Fetch challenge data
+          fetch('challenges.php', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: new URLSearchParams({
+              id: challengeId
+            })
+          })
+            .then(response => {
+              if (!response.ok) {
+                throw new Error('Network response was not ok')
+              }
+              return response.json()
+            })
+            .then(async data => {
+              // Update UI with challenge data
+              loader.style.display = 'none'
+              title.textContent = data.task
+              description.textContent = data.description
+              if (data.note) {
+                note.textContent = data.note
+              }
+              pageUrl = data.pagUrl
+              console.log(data)
+
+              // Check if challenge is already solved
+              const response = await fetch(
+                `./lab_statuses.php?challengeId=${challengeId}`,
+                {
+                  method: 'GET'
+                }
+              )
+              const responseData = await response.json()
+              console.info(responseData)
+
+              const keysArray = Object.keys(responseData.data)
+              if (
+                responseData.success &&
+                keysArray.length == 1 &&
+                responseData.data[keysArray[0]]
+              ) {
+                const status = document.getElementById('unsolved_btn')
+                status.textContent = 'Solved'
+              }
+            })
+            .catch(error => {
+              console.log(error)
+            })
+        } catch (error) {
+          console.log(error)
+        }
+      }
+
+      // Function to get cookie value by id
+      function getCookie(id) {
+        const value = `; ${document.cookie}`
+        const parts = value.split(`; ${id}=`)
+        if (parts.length === 2) return parts.pop().split(';').shift()
+      }
+
+      document.getElementById('url').addEventListener('click', function(event) {
+            event.preventDefault(); // Prevent the default action of the link
+
+            fetch('start-app.php')
+              .then(response => response.text()) // Parse the response as text
+              .then(data => {
+                alert(data); // Display the response message
+              })
+              .catch(error => {
+                console.error('Error:', error);
+              });
+          });
+
+      // Function to set up the lab
+      async function setUpLab() {
+        event.preventDefault()
+        try {
+          // Send request to set up lab data
+          const response = await fetch('./set_data.php', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: new URLSearchParams({})
+          })
+          if (!response.ok) {
+            throw new Error('Network response was not ok')
+          }
+          const responseData = await response.json()
+          // Open lab URL in a new tab
+          window.open(pageUrl, '_blank')
+        } catch (error) {
+          console.log(error)
+        }
+      }
+
+      // Function to submit flag
+      async function submitFlag() {
+        try {
+          // Get flag input element
+          const flag = document.getElementById('flag')
+          // Get unsolved button element
+          const unsolvedBtn = document.getElementById('unsolved_btn')
+          // Send flag to server for verification
+          const response = await fetch('./flag.php', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: new URLSearchParams({
+              flag: flag.value
+            })
+          })
+          // Get response data
+          const responseData = await response.json()
+          console.log('Response ', responseData)
+          // Show alert with response message
+          alert(responseData.msg)
+          // Clear flag input value
+          flag.value = ''
+          // Update status if flag is correct
+          const status = document.getElementById('unsolved_btn')
+          if (responseData.success) status.textContent = 'Solved'
+        } catch (error) {
+          console.log(error)
+        }
+      }
+    </script>
+  </body>
+</html>

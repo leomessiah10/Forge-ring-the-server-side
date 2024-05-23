@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tutorials</title>
+    <link href="./offline_bootstrap/bootstrap-5.3.3-dist/css/bootstrap.css" rel="stylesheet">
+    <script src="./offline_bootstrap/bootstrap-5.3.3-dist/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="./resources/css/card.css">
+    <link rel="stylesheet" href="./offline_bootstrap/bootstrap-5.3.3-dist/font/css/fontawesome-all.css">    <script src="./resources/labheader/js/user_functions.js"></script>
+    <script src="./resources/labheader/js/common_script.js"></script>
+</head>
+
+<body>
+    <div class="loader-container">
+        <div class="loader"></div>
+    </div>
+    <div class="position-fixed top-0 w-100" style="z-index: 100; background-color: #01102a; opacity:0.7">
+        <div class="border border-info ">
+            <h1 class="text-center text-white mt-3" style="font-weight: 500;">Server-Side Request Forgery</h1>
+        </div>
+        <nav class="navbar navbar-expand-lg navbar-light mt-1">
+            <div class="container-fluid">
+                <button class="navbar-toggler" type="button" data-mdb-toggle="collapse"
+                    data-mdb-target="#navbarCenteredExample" aria-controls="navbarCenteredExample" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="collapse navbar-collapse justify-content-center " id="navbarCenteredExample">
+                    <ul class="navbar-nav mb-2 mb-lg-0 ">
+                        <li class="nav-item">
+                            <a class="nav-link text-white " href="home.html">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="tutorials.html">Tutorials</a>
+                        </li>
+                        <li class="nav-item ">
+                            <a class="nav-link text-white" href="card.html">Practical-Labs</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="about.html">About</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="sign_in.html" id="signin">Sign-In</a>
+                        </li>
+                        <li class="nav-item">
+                            <button class="nav-link text-white" id="signout">Sign-Out</button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+    <img src="image.jpg" alt="image" class="container-fluid__bg" height="1010">
+    <div class="container" style="position: absolute; top: 20%; opacity:0.9">
+        <div class=" text-white mt-5 text-center "
+            style=" border-radius: 12px;background: #01102a;box-shadow:  7px 7px 13px 1px #010b1e,-10px -9px 11px 1px #1d335a; padding: 10px;">
+            <span class="title" style="font-size: 32px; font-weight: 600; margin: auto;"></span>
+        </div>
+        <div class="  mt-4 text-white "
+            style=" border-radius: 12px;background: #01102a;box-shadow:  7px 7px 13px 1px #010b1e,-10px -9px 11px 1px #1d335a; padding: 20px;">
+            <h3>Description&nbsp;</h3> <span class="description"
+                style="font-size: 18px; font-weight: 400; text-align: center;"></span><br>
+            <h3>Solution&nbsp;</h3> <span class="solution"
+                style="font-size: 18px; font-weight: 400;text-align: center;  "></span><br>
+            <h3>Reference&nbsp;</h3>
+            <div id="references" style="font-size: 18px; font-weight: 400; text-decoration: none; color: white;"></div>
+        </div>
+
+    </div>
+    <script>
+        window.onload = function () {
+            var url = 'dynamic_challenge.php?id=' + getCookie("id");
+            sendGetRequest(url);
+        };
+        function sendGetRequest(url) {
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', url, true);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == XMLHttpRequest.DONE) {
+                    var challengeData = JSON.parse(xhr.responseText);
+                    populateChallenge(challengeData);
+                }
+            };
+            xhr.send();
+        }
+        function populateChallenge(challengeData) {
+            if (challengeData.error) {
+                console.error(challengeData.error);
+                return;
+            }
+            document.querySelector('.title').innerText = challengeData.task;
+            document.querySelector('.description').innerText = challengeData.defination;
+            document.querySelector('.solution').innerHTML = challengeData.solution;
+
+            var references = challengeData.reference;
+            var referencesDiv = document.getElementById('references');
+            references.forEach(function (ref, index) {
+                var a = document.createElement('a');
+                a.setAttribute('href', ref);
+                a.setAttribute('target', '_blank'); // Add this line to open links in a new tab
+                a.textContent = 'Reference ' + (index + 1);
+                referencesDiv.appendChild(a);
+                referencesDiv.appendChild(document.createElement('br'));
+            });
+        }
+        function getCookie(id) {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${id}=`);
+            if (parts.length === 2) return parts.pop().split(';').shift();
+        }
+    </script>
+</body>
+
+</html>

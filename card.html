@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Practical Labs</title>
+   <link rel="stylesheet" href="./offline_bootstrap/bootstrap-5.3.3-dist/css/bootstrap.min.css">
+    <script src="./offline_bootstrap/bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="./resources/css/card.css">
+    <link rel="stylesheet" href="./offline_bootstrap/bootstrap-5.3.3-dist/font/css/fontawesome-all.css"></head>
+
+<body>
+    <div class="loader-container">
+        <div class="loader"></div>
+    </div>
+    <div class="position-fixed top-0 w-100" style="z-index: 100; background-color: #01102a; opacity:0.7">
+        <div class="border border-info ">
+            <h1 class="text-center text-white mt-3" style="font-weight: 500;">Server-Side Request Forgery</h1>
+        </div>
+        <nav class="navbar navbar-expand-lg navbar-light mt-1">
+            <div class="container-fluid">
+                <button class="navbar-toggler" type="button" data-mdb-toggle="collapse"
+                    data-mdb-target="#navbarCenteredExample" aria-controls="navbarCenteredExample" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="collapse navbar-collapse justify-content-center " id="navbarCenteredExample">
+                    <ul class="navbar-nav mb-2 mb-lg-0 ">
+                        <li class="nav-item">
+                            <a class="nav-link text-white " href="home.html">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="tutorials.html">Tutorials</a>
+                        </li>
+                        <li class="nav-item ">
+                            <a class="nav-link text-white" href="card.html">Practical-Labs</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="about.html">About</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="sign_in.html" id="signin">Sign-In</a>
+                        </li>
+                        <li class="nav-item">
+                            <button class="nav-link text-white" id="signout">Sign-Out</button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+    <img src="cardnew.jpg" alt="image" class="container-fluid__bg" height="1010">
+    <div class="container" style="position: absolute; top: 20%; opacity:0.9">
+        <div class="card text-white "style=" border-radius: 12px;background: #01102a;box-shadow:  7px 7px 13px 1px #010b1e,-10px -9px 11px 1px #1d335a;">
+            <i class="fa fa-flask" aria-hidden="true" id="icon"></i>
+            <div class="card-body">
+                <div class="text-section">
+                    <h5 class="card-title">Basic SSRF against the local server</h5>
+                </div>
+                <div class="cta-section">
+                    <div><span id='lab1'>Unsolved</span></div>
+                    <a href="#" class="btn btn-dark " onclick="Play_Challenge('lab1');">Play</a>
+                </div>
+            </div>
+        </div>
+        <div class="card  mt-4 text-white"
+            style=" border-radius: 12px;background: #01102a;box-shadow:  7px 7px 13px 1px #010b1e,-10px -9px 11px 1px #1d335a;">
+            <i class="fa fa-flask " aria-hidden="true" id="icon"></i>
+            <div class="card-body">
+                <div class="text-section">
+                    <h5 class="card-title fw-bold">Basic SSRF against another back-end system</h5>
+                </div>
+                <div class="cta-section">
+                    <div><span id="lab2">Unsolved</span></div>
+                    <a href="#" class="btn btn-dark" onclick="Play_Challenge('lab2');">Play</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="card dark mt-4 text-white"
+            style=" border-radius: 12px;background: #01102a;box-shadow:  7px 7px 13px 1px #010b1e,-10px -9px 11px 1px #1d335a;">
+            <i class="fa fa-flask " aria-hidden="true" id="icon"></i>
+            <div class="card-body">
+                <div class="text-section">
+                    <h5 class="card-title fw-bold">SSRF with blacklist-based input filter</h5>
+                </div>
+                <div class="cta-section">
+                    <div><span id="lab3">Unsolved</span></div>
+                    <a href="#" class="btn btn-dark" onclick="Play_Challenge('lab3');">Play</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="card dark mt-4 text-white"
+            style=" border-radius: 12px;background: #01102a;box-shadow:  7px 7px 13px 1px #010b1e,-10px -9px 11px 1px #1d335a;">
+            <i class="fa fa-flask " aria-hidden="true" id="icon"></i>
+            <div class="card-body">
+                <div class="text-section">
+                    <h5 class="card-title fw-bold">SSRF with whitelist-based input filter</h5>
+                </div>
+                <div class="cta-section">
+                    <div><span id="lab4">Unsolved</span></div>
+                    <a href="#" class="btn btn-dark p-2 mt-2" onclick="Play_Challenge('lab4');">Play</a>
+                </div>
+            </div>
+        </div>
+        <script src="./resources/labheader/js/user_functions.js"></script>
+        <script src="./resources/labheader/js/common_script.js"></script>
+        <script>
+            async function Play_Challenge(id) {
+                try {
+                    const response = await fetch('./card.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded'
+                        },
+                        body: new URLSearchParams({
+                            id: id,
+                        })
+                    });
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    const responseData = await response.json();
+                    window.location.href = "./task.html";
+                } catch (error) {
+                    console.log(error);
+                }
+            }
+           
+            window.onload = async ()=>{
+                const response = await fetch('./lab_statuses.php', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    }
+                });
+                const responseData = await response.json();
+
+                if(responseData.success){
+                    Object.keys(responseData.data).forEach(key=>{
+                        let element = null;
+                        if(responseData.data[key])
+                            element = document.getElementById(responseData.data[key])
+
+                        if(element)
+                            element.innerHTML = "Solved" 
+                    })
+                } 
+            }
+
+        </script>
+</body>
+
+</html>

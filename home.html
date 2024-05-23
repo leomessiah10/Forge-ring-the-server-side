@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    
+    <link rel="stylesheet" href="./offline_bootstrap/bootstrap-5.3.3-dist/css/bootstrap.css">
+    <script src="./offline_bootstrap/bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="./resources/css/styles.css">
+    <link rel="stylesheet" href="./offline_bootstrap/bootstrap-5.3.3-dist/font/css/fontawesome-all.css"></head>
+
+<body>
+    <div class="loader-container">
+        <div class="loader"></div>
+    </div>
+    <div>
+        <div class="position-fixed top-0 w-100" style="z-index: 100; background-color: #01102a; opacity:0.7">
+            <div class="border border-info ">
+                <h1 class="text-center text-white mt-3" style="font-weight: 500;">Server-Side Request Forgery</h1>
+            </div>
+            <nav class="navbar navbar-expand-lg navbar-light mt-1">
+                <div class="container-fluid">
+                    <button class="navbar-toggler" type="button" data-mdb-toggle="collapse"
+                        data-mdb-target="#navbarCenteredExample" aria-controls="navbarCenteredExample"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <div class="collapse navbar-collapse justify-content-center " id="navbarCenteredExample">
+                        <ul class="navbar-nav mb-2 mb-lg-0 ">
+                            <li class="nav-item">
+                                <a class="nav-link text-white " href="home.html">Home</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-white" href="tutorials.html">Tutorials</a>
+                            </li>
+                            <li class="nav-item ">
+                                <a class="nav-link text-white" href="card.html">Practical-Labs</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-white" href="about.html">About</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-white" href="sign_in.html" id="signin">Sign-In</a>
+                            </li>
+                            <li class="nav-item">
+                                <button class="nav-link text-white" id="signout">Sign-Out</button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </div>
+        <div class="container-fluid  d-flex align-items-center " style="position: absolute; top: 25%; opacity:0.8">
+            <div id="innerPage">
+                <div class="row align-items-center justify-content-center">
+
+                    <div class="row align-items-center justify-content-center mt-5">
+
+                        <div class="col-sm-5 d-flex align-items-center">
+                            <a  class="BGN" href="ssrfbrief.html">
+                                <b>What is SSRF?</b>
+                            </a>
+                        </div>
+                        <div class="col-sm-5 d-flex align-items-center">
+                            <a class="BGN " href="mitigating.html">
+                                <b>Mitigating SSRF Vulnerabilities</b>
+                            </a>
+                        </div>
+                        <div class="col-sm-5 d-flex align-items-center">
+                            <a class="BGN" href="impacts.html">
+                                <b>Potential Impacts of SSRF </b>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <img src="image.jpg" alt="image" class="container-fluid__bg" height="1010">
+    </div>
+    <script>
+        window.onload = function () {
+            loadPage();
+        }
+        function loadPage() {
+            const username = getCookie("username");
+            checkLoginStatus();
+        }
+        var loader = document.querySelector('.loader-container');
+        function checkLoginStatus() {
+            const url = 'get_session.php';
+            const data = {
+                loggedin: 'loggedin'
+            };
+            const options = {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            };
+            fetch(url, options)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    loader.style.display = 'none';
+                    console.log(data.isLoggedIn);
+                    if (!data.isLoggedIn) {
+                        document.getElementById("signin").style.display = "block";
+                        document.getElementById("signout").style.display = "none";
+                    } else {
+                        document.getElementById("signin").style.display = "none";
+                        document.getElementById("signout").style.display = "block";
+                    }
+                })
+                .catch(error => {
+                    console.log('Error:', error);
+                });
+        }
+
+        const signoutButton = document.getElementById('signout');
+        signoutButton.addEventListener('click', function () {
+            window.location.href = './sign_out.php';
+        });
+
+        function getCookie(name) {
+            const cookies = document.cookie.split(";");
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.startsWith(name + "=")) {
+                    return cookie.substring(name.length + 1);
+                }
+            }
+            return null;
+        }
+    </script>
+</body>
+
+</html>

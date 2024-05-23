@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Meta tags for character set and viewport -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Title of the page -->
+    <title> Potential Impacts of SSRF</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="./offline_bootstrap/bootstrap-5.3.3-dist/css/bootstrap.css">
+
+    <!-- Bootstrap JavaScript -->
+    <script src="./offline_bootstrap/bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="./resources/css/styles.css">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="./offline_bootstrap/bootstrap-5.3.3-dist/font/css/fontawesome-all.css">
+    <!-- User-defined JavaScript file -->
+    <script src="./resources/labheader/js/user_functions.js"></script>
+</head>
+<body>
+    <!-- Loader container -->
+    <div class="loader-container">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Navbar -->
+    <div>
+        <div class="position-fixed top-0 w-100" style="z-index: 100; background-color: #01102a; opacity:0.7">
+            <!-- Navbar header -->
+            <div class="border border-info">
+                <h1 class="text-center text-white mt-3" style="font-weight: 500;">Server-Side Request Forgery</h1>
+            </div>
+
+            <!-- Navbar navigation -->
+            <nav class="navbar navbar-expand-lg navbar-light mt-1">
+                <div class="container-fluid">
+                    <!-- Navbar toggler -->
+                    <button class="navbar-toggler" type="button" data-mdb-toggle="collapse"
+                        data-mdb-target="#navbarCenteredExample" aria-controls="navbarCenteredExample" aria-expanded="false"
+                        aria-label="Toggle navigation">
+                        <i class="fas fa-bars"></i>
+                    </button>
+
+                    <!-- Navbar links -->
+                    <div class="collapse navbar-collapse justify-content-center " id="navbarCenteredExample">
+                        <ul class="navbar-nav mb-2 mb-lg-0 ">
+                            <li class="nav-item">
+                                <a class="nav-link text-white " href="home.html">Home</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-white" href="tutorials.html">Tutorials</a>
+                            </li>
+                            <li class="nav-item ">
+                                <a class="nav-link text-white" href="card.html">Practical-Labs</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-white" href="about.html">About</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-white" href="sign_in.html" id="signin">Sign-In</a>
+                            </li>
+                            <li class="nav-item">
+                                <button class="nav-link text-white" id="signout">Sign-Out</button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </div>
+
+        <!-- Main content section -->
+        <div class="container-fluid  d-flex align-items-center " style="position: absolute; top: 23%; opacity:0.9">
+            <div id="innerPage">
+                <div class="row align-items-center justify-content-center p-3">
+                    <!-- About section -->
+                    <h4 class="text-center text-white mt-3"><b> Potential Impacts of SSRF </b></h4>
+                    <p class="text-white">Mitigating SSRF (Server-Side Request Forgery) vulnerabilities is crucial because these vulnerabilities can have severe security implications for an application and its infrastructure. <br> Here are the primary reasons why SSRF vulnerabilities need to be mitigated: <br></p>
+                    <!-- Mission section -->
+
+                    <h4 class="text-center text-white mt-3"><b>Mitigating SSRF Vulnerabilities</b></h4>
+                    <p class="text-white"><b>1. Unauthorized Access to Internal Systems </b> <br> SSRF can allow attackers to access internal systems that are not intended to be exposed to the internet. This includes: <br><b>Internal APIs:</b> Accessing undocumented or privileged APIs. <br> <b>Database Servers:</b> Interacting with database servers directly. <br> <b>Admin Panels:</b> Accessing internal administrative interfaces. <br> <br>
+                        <b> 2. Sensitive Data Exposure  </b> <br> Attackers can leverage SSRF to retrieve sensitive information that should not be accessible: <br><b>Configuration Files: </b>Obtaining files that contain configuration settings. <br> <b>Metadata Services:</b> In cloud environments, accessing metadata services (e.g., AWS, GCP) to obtain temporary credentials and other sensitive data. <br> <b>Internal Documents:</b> Extracting internal documents or data. <br> <br>
+                        <b> 3. Port Scanning and Network Reconnaissance </b> <br>SSRF can be used to perform internal port scanning, which helps attackers: <br><b>Identify Services:</b> Discover what services are running on the internal network. <br><b> Map the Network: </b>Understand the structure and layout of the internal network. <br> <br>
+                        <b> 4. Exfiltration of Data </b> <br>Attackers can use SSRF to send sensitive information from the server to an external system they control, leading to: <br><b>Data Breaches:</b> Exfiltrating confidential data, customer information, or intellectual property. <br> <br>
+                        <b> 5. Exploitation of Other Vulnerabilities </b> <br> SSRF can be a gateway to other vulnerabilities and attacks: <br> <b>RCE (Remote Code Execution):</b> If the internal service has vulnerabilities, SSRF can be used to exploit these for remote code execution. <br><b>Injection Attacks:</b> Combining SSRF with injection vulnerabilities to compromise internal services.<br> <br>
+                        <b> 6. Cloud Environment Risks </b> <br> In cloud environments, SSRF can be particularly dangerous: <br><b>Metadata API Exploitation:</b> Accessing the metadata API in cloud environments like AWS can yield IAM role credentials and other sensitive information, leading to broader exploitation within the cloud infrastructure. <br> <br>
+                        <b> 7. Compliance and Legal Issues </b> <br> Failing to protect against SSRF can lead to non-compliance with various regulations and standards: <br> <b>GDPR: </b>Exposure of personal data can lead to significant fines and legal repercussions. <br><b>PCI-DSS:</b> Compromising payment data can result in penalties and loss of certification. <br><b>Industry Standards: </b> Violating security standards can harm the organization's reputation and trustworthiness. <br> <br> </p>
+                </div>
+            </div>
+        </div>
+        <img src="impacts2.jpg" alt="image" class="container-fluid__bg" width="2000" height="1300">
+    </div>
+</body>
+</html>
